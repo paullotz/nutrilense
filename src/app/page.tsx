@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { CameraComponent } from "@/components/camera";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -14,6 +15,7 @@ export default async function Home() {
       </Link>
       <br />
       <br />
+      <CameraComponent />
       {session ? (
         <>
           Logged in
