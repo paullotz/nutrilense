@@ -1,57 +1,48 @@
-import {
-  text,
-  timestamp,
-  boolean,
-  pgtablecreator,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { text, timestamp, boolean, pgTableCreator } from "drizzle-orm/pg-core";
 import { z } from "zod";
-import { createselectschema } from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 
-export const createtable = pgtablecreator((name) => `nutrilense_${name}`);
+export const createTable = pgTableCreator((name) => `nutrilense_${name}`);
 
-export const user = createtable("user", {
-  id: text("id").primarykey(),
-  name: text("name").notnull(),
-  email: text("email").notnull().unique(),
-  emailverified: boolean("emailverified").notnull(),
+export const user = createTable("user", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("emailVerified").notNull(),
   image: text("image"),
-  createdat: timestamp("createdat").notnull(),
-  updatedat: timestamp("updatedat").notnull(),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
 });
 
-export const session = createtable("session", {
-  id: text("id").primarykey(),
-  expiresat: timestamp("expiresat").notnull(),
-  ipaddress: text("ipaddress"),
-  useragent: text("useragent"),
-  userid: text("userid")
-    .notnull()
+export const session = createTable("session", {
+  id: text("id").primaryKey(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  ipAddress: text("ipAddress"),
+  userAgent: text("userAgent"),
+  userId: text("userId")
+    .notNull()
     .references(() => user.id),
 });
 
-export const account = createtable("account", {
-  id: text("id").primarykey(),
-  accountid: text("accountid").notnull(),
-  providerid: text("providerid").notnull(),
-  userid: text("userid")
-    .notnull()
+export const account = createTable("account", {
+  id: text("id").primaryKey(),
+  accountId: text("accountId").notNull(),
+  providerId: text("providerId").notNull(),
+  userId: text("userId")
+    .notNull()
     .references(() => user.id),
-  accesstoken: text("accesstoken"),
-  refreshtoken: text("refreshtoken"),
-  idtoken: text("idtoken"),
-  expiresat: timestamp("expiresat"),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  idToken: text("idToken"),
+  expiresAt: timestamp("expiresAt"),
   password: text("password"),
 });
 
-export const verification = createtable("verification", {
-  id: text("id").primarykey(),
-  identifier: text("identifier").notnull(),
-  value: text("value").notnull(),
-  expiresat: timestamp("expiresat").notnull(),
+export const verification = createTable("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
 });
 
-export type check = z.infer<
-  returntype<typeof createselectschema<typeof check>>
->;
-export type user = z.infer<returntype<typeof createselectschema<typeof user>>>;
+export type User = z.infer<ReturnType<typeof createSelectSchema<typeof user>>>;
