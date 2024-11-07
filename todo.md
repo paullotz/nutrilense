@@ -1,7 +1,7 @@
-- [] add docker compose
-- [] add database handler
-- [] add database schema
-- [] add auth
-- [] add basic pages and structure (auth, landing...)
+- [x] add docker compose
+- [x] add database handler
+- [x] add database schema
+- [x] add auth
+- [x] add basic pages and structure (auth, landing...)
 - [] deploy to vercel
 
