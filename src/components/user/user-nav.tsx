@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DarkModeToggle } from "../darkmode-toggle";
+// import { DarkModeToggle } from "../darkmode-toggle";
 
 export const UserNavbar = async () => {
   const session = await auth.api.getSession({
@@ -66,12 +66,10 @@ export const UserNavbar = async () => {
             <AvatarImage src={session.user.image} />
             <AvatarFallback>{session.user.name[0]}</AvatarFallback>
           </Avatar>
-          <DarkModeToggle />
           <SignOut />
         </div>
 
         <div className="md:hidden mr-6 grid grid-cols-2">
-          <DarkModeToggle />
           <Popover>
             <PopoverTrigger asChild>
               <Button variant={"outline"}>
