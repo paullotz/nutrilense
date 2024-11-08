@@ -1,6 +1,6 @@
 "use server";
 
-export async function analyzeImage(base64Image: string) {
+export async function analyzeImage(imageUrl: string) {
   const openAiApiKey = process.env.OPENAI_API_KEY;
   if (!openAiApiKey) {
     throw new Error("OPENAI_API_KEY environment variable is not set");
@@ -14,6 +14,7 @@ export async function analyzeImage(base64Image: string) {
     },
     body: JSON.stringify({
       model: "chatgpt-4o-latest",
+      response_format: { type: "json_object" },
       messages: [
         {
           role: "user",
@@ -31,7 +32,7 @@ export async function analyzeImage(base64Image: string) {
             {
               type: "image_url",
               image_url: {
-                url: base64Image,
+                url: imageUrl,
               },
             },
           ],
