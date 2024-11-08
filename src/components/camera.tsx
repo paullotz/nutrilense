@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Camera, Loader, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { analyzeImage } from "@/server/actions";
+import { analyzeImage as analyzeImageMutation } from "@/server/actions";
+import { UploadButton } from "@/lib/uploadthing";
+import { useToast } from "@/hooks/use-toast";
 
 interface Food {
   name: string;
@@ -14,48 +16,17 @@ interface Food {
 }
 
 export const CameraComponent = () => {
-  const [source, setSource] = useState<string>("");
-  const [base64String, setBase64String] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [result, setResult] = useState<Food | null>(null);
+  const { toast } = useToast();
+  const [isUploading, setIsUploading] = useState(false);
+  const [fileUrl, setFileUrl] = useState<string>();
+  const [food, setFood] = useState<Food>();
 
-  const handleCapture = (target: HTMLInputElement) => {
-    if (target.files && target.files.length !== 0) {
-      const file = target.files[0];
-      const newUrl = URL.createObjectURL(file);
-      setSource(newUrl);
-      setError("");
-
-      // Convert to base64
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setBase64String(base64);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleCameraClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleCameraError = () => {
-    setError("Camera access is not supported or permission was denied.");
-  };
-
-  const analyzeimage = useMutation({
-    mutationFn: async (base64Image: string) => {
-      // Call the server action directly from here
-      const response = await analyzeImage(base64Image);
-      return response;
-    },
+  const analyzeImage = useMutation({
+    mutationFn: analyzeImageMutation,
     onSuccess: (data) => {
-      //const food = JSON.parse(data.choices[0].message.content) as Food;
-      setResult(data.choices[0].message.content); // Set the result from OpenAI
+      const food = JSON.parse(data.choices[0].message.content) as Food;
+      setFood(food);
+      console.log(food);
     },
     onError: (error) => {
       console.error("Error analyzing image:", error);
@@ -63,61 +34,44 @@ export const CameraComponent = () => {
   });
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <input
-        ref={fileInputRef}
-        accept="image/*"
-        id="icon-button-file"
-        type="file"
-        capture="environment"
-        onChange={(e) => handleCapture(e.target)}
-        onError={handleCameraError}
-        className="hidden"
-      />
+    <div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <UploadButton
+          endpoint="imageUploader"
+          onUploadBegin={() => setIsUploading(true)}
+          onClientUploadComplete={(res) => {
+            setFileUrl(res[0].appUrl);
+            setIsUploading(false);
+            toast({
+              title: "Nutrilense",
+              description: "image uploaded",
+            });
+          }}
+          onUploadError={(error: Error) => {
+            console.error(error);
+            setIsUploading(false);
+            alert(`ERROR! ${error.message}`);
+          }}
+          className="w-full max-w-xs"
+        />
+      </div>
       <Button
-        onClick={handleCameraClick}
-        size="icon"
-        aria-label="Take a picture"
+        disabled={analyzeImage.isPending}
+        onClick={() => {
+          if (fileUrl) {
+            analyzeImage.mutate(fileUrl);
+          } else {
+            toast({
+              title: "Nutrilense",
+              description: "failed",
+            });
+          }
+        }}
       >
-        <Camera className="h-6 w-6" />
+        {analyzeImage.isPending && <Loader2 className="animate-spin h-4 w-4" />}
+        Analyze
       </Button>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-      {source && (
-        <>
-          <div className="mt-4 max-w-sm w-full">
-            <img
-              src={source}
-              alt="Captured"
-              className="w-full h-auto rounded-lg shadow-lg"
-            />
-          </div>
-        </>
-      )}
-      {base64String && (
-        <>
-          <div className="mt-4 max-w-sm w-full">
-            <p className="text-sm font-medium mb-2">Base64 Encoded String:</p>
-            <textarea
-              readOnly
-              value={base64String}
-              className="w-full h-24 p-2 text-xs border rounded-md"
-            />
-          </div>
-
-          <Button
-            disabled={analyzeimage.isPending}
-            onClick={() => {
-              analyzeimage.mutate(base64String);
-            }}
-          >
-            {analyzeimage.isPending && (
-              <Loader2 className="animate-spin h-4 w-4" />
-            )}
-            Analyze
-          </Button>
-        </>
-      )}
-      {result && <p>{JSON.stringify(result)}</p>}
+      {food && <pre>{JSON.stringify(food, null, 4)}</pre>}
     </div>
   );
 };

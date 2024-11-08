@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { CameraComponent } from "@/components/camera";
+import { UploadButton } from "@/lib/uploadthing";
 
 export default async function Home() {
   const session = await auth.api.getSession({
