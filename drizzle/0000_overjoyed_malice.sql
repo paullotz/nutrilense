@@ -10,6 +10,18 @@ CREATE TABLE IF NOT EXISTS "nutrilense_account" (
 	"password" text
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "nutrilense_userProfile" (
+	"id" text PRIMARY KEY NOT NULL,
+	"height" numeric NOT NULL,
+	"name" text NOT NULL,
+	"gender" "gender" DEFAULT 'divers',
+	"goal" "goal" DEFAULT 'gain_muscle',
+	"activityLevel" "activity_level" DEFAULT 'low',
+	"createdAt" timestamp NOT NULL,
+	"updatedAt" timestamp NOT NULL,
+	"userId" text NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nutrilense_session" (
 	"id" text PRIMARY KEY NOT NULL,
 	"expiresAt" timestamp NOT NULL,
@@ -38,6 +50,12 @@ CREATE TABLE IF NOT EXISTS "nutrilense_verification" (
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "nutrilense_account" ADD CONSTRAINT "nutrilense_account_userId_nutrilense_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."nutrilense_user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "nutrilense_userProfile" ADD CONSTRAINT "nutrilense_userProfile_userId_nutrilense_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."nutrilense_user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

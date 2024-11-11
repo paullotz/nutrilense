@@ -1,5 +1,5 @@
 {
-  "id": "9da4a8c3-9832-484b-8254-26e9199427b3",
+  "id": "29c90699-57b1-4259-a405-bc1c576357bf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -68,6 +68,93 @@
         "nutrilense_account_userId_nutrilense_user_id_fk": {
           "name": "nutrilense_account_userId_nutrilense_user_id_fk",
           "tableFrom": "nutrilense_account",
+          "tableTo": "nutrilense_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.nutrilense_userProfile": {
+      "name": "nutrilense_userProfile",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "height": {
+          "name": "height",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gender": {
+          "name": "gender",
+          "type": "gender",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'divers'"
+        },
+        "goal": {
+          "name": "goal",
+          "type": "goal",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'gain_muscle'"
+        },
+        "activityLevel": {
+          "name": "activityLevel",
+          "type": "activity_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'low'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nutrilense_userProfile_userId_nutrilense_user_id_fk": {
+          "name": "nutrilense_userProfile_userId_nutrilense_user_id_fk",
+          "tableFrom": "nutrilense_userProfile",
           "tableTo": "nutrilense_user",
           "columnsFrom": [
             "userId"

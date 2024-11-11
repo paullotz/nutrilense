@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { analyzeImage as analyzeImageMutation } from "@/server/actions";
 import { UploadButton } from "@/lib/uploadthing";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 interface Food {
   name: string;
@@ -34,43 +35,56 @@ export const CameraComponent = () => {
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <UploadButton
-          endpoint="imageUploader"
-          onUploadBegin={() => setIsUploading(true)}
-          onClientUploadComplete={(res) => {
-            setFileUrl(res[0].appUrl);
-            setIsUploading(false);
-            toast({
-              title: "Nutrilense",
-              description: "image uploaded",
-            });
+    <div className="container mx-auto">
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        {fileUrl && (
+          <img
+            src={fileUrl}
+            alt="image preview"
+            className="rounded-md border border-black"
+          />
+        )}
+        {!fileUrl && (
+          <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <UploadButton
+              endpoint="imageUploader"
+              onUploadBegin={() => setIsUploading(true)}
+              onClientUploadComplete={(res) => {
+                setFileUrl(res[0].appUrl);
+                setIsUploading(false);
+                toast({
+                  title: "Nutrilense",
+                  description: "image uploaded",
+                });
+              }}
+              onUploadError={(error: Error) => {
+                console.error(error);
+                setIsUploading(false);
+                alert(`ERROR! ${error.message}`);
+              }}
+              className="w-full max-w-xs"
+            />
+          </div>
+        )}
+        <Button
+          disabled={analyzeImage.isPending}
+          onClick={() => {
+            if (fileUrl) {
+              analyzeImage.mutate(fileUrl);
+            } else {
+              toast({
+                title: "Nutrilense",
+                description: "failed",
+              });
+            }
           }}
-          onUploadError={(error: Error) => {
-            console.error(error);
-            setIsUploading(false);
-            alert(`ERROR! ${error.message}`);
-          }}
-          className="w-full max-w-xs"
-        />
+        >
+          {analyzeImage.isPending && (
+            <Loader2 className="animate-spin h-4 w-4" />
+          )}
+          Analyze
+        </Button>
       </div>
-      <Button
-        disabled={analyzeImage.isPending}
-        onClick={() => {
-          if (fileUrl) {
-            analyzeImage.mutate(fileUrl);
-          } else {
-            toast({
-              title: "Nutrilense",
-              description: "failed",
-            });
-          }
-        }}
-      >
-        {analyzeImage.isPending && <Loader2 className="animate-spin h-4 w-4" />}
-        Analyze
-      </Button>
       {food && <pre>{JSON.stringify(food, null, 4)}</pre>}
     </div>
   );

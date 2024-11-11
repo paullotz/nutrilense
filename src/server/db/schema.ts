@@ -1,8 +1,36 @@
-import { text, timestamp, boolean, pgTableCreator } from "drizzle-orm/pg-core";
+import {
+  text,
+  timestamp,
+  boolean,
+  pgTableCreator,
+  decimal,
+  pgEnum,
+} from "drizzle-orm/pg-core";
 import { z } from "zod";
 import { createSelectSchema } from "drizzle-zod";
 
 export const createTable = pgTableCreator((name) => `nutrilense_${name}`);
+
+// Enums
+const goalEnum = pgEnum("goal", ["gain_muscle", "loose_fat", "maintain"]);
+const genderEnum = pgEnum("gender", ["male", "female", "divers"]);
+const activityLevelEnum = pgEnum("activity_level", ["low", "medium", "high"]);
+
+export const profile = createTable("userProfile", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  height: decimal("height").notNull(),
+  weight: text("name").notNull(),
+  gender: genderEnum("gender").default("divers"),
+  goal: goalEnum("goal").default("gain_muscle"),
+  activityLevel: activityLevelEnum("activityLevel").default("low"),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
 
 export const user = createTable("user", {
   id: text("id").primaryKey(),
