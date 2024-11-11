@@ -1,5 +1,11 @@
 "use server";
 
+import { auth } from "@/lib/auth";
+import { OnboardingFormSchemaType } from "@/lib/form";
+import { headers } from "next/headers";
+import { profile } from "./db/schema";
+import { db } from "./db";
+
 export async function analyzeImage(imageUrl: string) {
   const openAiApiKey = process.env.OPENAI_API_KEY;
   if (!openAiApiKey) {
@@ -45,4 +51,21 @@ export async function analyzeImage(imageUrl: string) {
   const data = await response.json();
 
   return data;
+}
+
+export async function insertProfile(values: OnboardingFormSchemaType) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (!session) {
+    throw new Error("No session found.");
+  }
+
+  const result = await db.insert(profile).values({
+    ...values,
+    userId: session.user.id,
+  });
+
+  return result;
 }

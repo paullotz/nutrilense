@@ -1,5 +1,5 @@
 {
-  "id": "29c90699-57b1-4259-a405-bc1c576357bf",
+  "id": "71aac2b7-02da-4dd6-976c-3ab50b278f24",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -99,13 +99,13 @@
           "name": "height",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "name": {
-          "name": "name",
-          "type": "text",
+        "weight": {
+          "name": "weight",
+          "type": "numeric",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "gender": {
           "name": "gender",
@@ -135,13 +135,15 @@
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "updatedAt": {
           "name": "updatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "userId": {
           "name": "userId",
@@ -330,7 +332,35 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.activity_level": {
+      "name": "activity_level",
+      "schema": "public",
+      "values": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "public.gender": {
+      "name": "gender",
+      "schema": "public",
+      "values": [
+        "male",
+        "female",
+        "divers"
+      ]
+    },
+    "public.goal": {
+      "name": "goal",
+      "schema": "public",
+      "values": [
+        "gain_muscle",
+        "loose_fat",
+        "maintain"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

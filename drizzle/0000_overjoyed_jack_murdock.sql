@@ -1,3 +1,6 @@
+CREATE TYPE "public"."activity_level" AS ENUM('low', 'medium', 'high');--> statement-breakpoint
+CREATE TYPE "public"."gender" AS ENUM('male', 'female', 'divers');--> statement-breakpoint
+CREATE TYPE "public"."goal" AS ENUM('gain_muscle', 'loose_fat', 'maintain');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nutrilense_account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"accountId" text NOT NULL,
@@ -12,13 +15,13 @@ CREATE TABLE IF NOT EXISTS "nutrilense_account" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nutrilense_userProfile" (
 	"id" text PRIMARY KEY NOT NULL,
-	"height" numeric NOT NULL,
-	"name" text NOT NULL,
+	"height" numeric,
+	"weight" numeric,
 	"gender" "gender" DEFAULT 'divers',
 	"goal" "goal" DEFAULT 'gain_muscle',
 	"activityLevel" "activity_level" DEFAULT 'low',
-	"createdAt" timestamp NOT NULL,
-	"updatedAt" timestamp NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL,
 	"userId" text NOT NULL
 );
 --> statement-breakpoint

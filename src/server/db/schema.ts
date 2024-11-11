@@ -12,21 +12,31 @@ import { createSelectSchema } from "drizzle-zod";
 export const createTable = pgTableCreator((name) => `nutrilense_${name}`);
 
 // Enums
-const goalEnum = pgEnum("goal", ["gain_muscle", "loose_fat", "maintain"]);
-const genderEnum = pgEnum("gender", ["male", "female", "divers"]);
-const activityLevelEnum = pgEnum("activity_level", ["low", "medium", "high"]);
+export const goalEnum = pgEnum("goal", [
+  "gain_muscle",
+  "loose_fat",
+  "maintain",
+]);
+
+export const genderEnum = pgEnum("gender", ["male", "female", "divers"]);
+
+export const activityLevelEnum = pgEnum("activity_level", [
+  "low",
+  "medium",
+  "high",
+]);
 
 export const profile = createTable("userProfile", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  height: decimal("height").notNull(),
-  weight: text("name").notNull(),
+  height: decimal("height"),
+  weight: decimal("weight"),
   gender: genderEnum("gender").default("divers"),
   goal: goalEnum("goal").default("gain_muscle"),
   activityLevel: activityLevelEnum("activityLevel").default("low"),
-  createdAt: timestamp("createdAt").notNull(),
-  updatedAt: timestamp("updatedAt").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   userId: text("userId")
     .notNull()
     .references(() => user.id),
