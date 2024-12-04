@@ -20,7 +20,7 @@ export const CalorieOverview = ({ food, profile }: CalorieOverviewProps) => {
     })
     .reduce((sum: number, current: Food) => sum + Number(current.calories), 0);
   const percentage = Math.min(
-    Math.round((dailyCalories / profile.goalCalories) * 100),
+    Math.round((dailyCalories / Number(profile.goalCalories)) * 100),
     100,
   );
   const strokeWidth = 10;
