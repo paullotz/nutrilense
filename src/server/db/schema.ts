@@ -26,6 +26,20 @@ export const activityLevelEnum = pgEnum("activity_level", [
   "high",
 ]);
 
+export const food = createTable("food", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  protein: decimal("protein").notNull(),
+  fat: decimal("fat").notNull(),
+  carbs: decimal("carbs").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
 export const profile = createTable("userProfile", {
   id: text("id")
     .primaryKey()

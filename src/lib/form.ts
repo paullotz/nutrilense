@@ -12,5 +12,12 @@ export const OnboardingFormSchema = z.object({
   goal: GoalEnum,
   gender: GenderEnum,
 });
-
 export type OnboardingFormSchemaType = z.infer<typeof OnboardingFormSchema>;
+
+export const FoodFormSchema = z.object({
+  name: z.string(),
+  protein: z.coerce.number(),
+  carbs: z.coerce.number(),
+  fat: z.coerce.number(),
+});
+export type FoodFormSchemaType = z.infer<typeof FoodFormSchema>;

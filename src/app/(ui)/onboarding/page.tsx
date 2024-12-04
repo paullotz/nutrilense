@@ -4,8 +4,8 @@ import { UserOnboarding } from "@/components/user/user-onboarding";
 import { auth } from "@/lib/auth";
 import { profile } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 const page = async () => {
   const session = await auth.api.getSession({
@@ -20,8 +20,8 @@ const page = async () => {
     where: eq(profile?.userId, session.user.id),
   });
 
-  if (userProfile) {
-    revalidatePath("/dashboard");
+  if (!userProfile) {
+    redirect("/dashboard");
   }
 
   return (
