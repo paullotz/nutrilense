@@ -6,8 +6,9 @@ const ActivityLevelEnum = z.enum(activityLevelEnum.enumValues);
 const GenderEnum = z.enum(genderEnum.enumValues);
 
 export const OnboardingFormSchema = z.object({
-  weight: z.number().min(30).max(200),
-  height: z.number().min(120).max(300),
+  weight: z.coerce.number().transform((value) => value.toString()),
+  height: z.coerce.number().transform((value) => value.toString()),
+  goalCalories: z.coerce.number().transform((value) => value.toString()),
   activityLevel: ActivityLevelEnum,
   goal: GoalEnum,
   gender: GenderEnum,
@@ -16,8 +17,9 @@ export type OnboardingFormSchemaType = z.infer<typeof OnboardingFormSchema>;
 
 export const FoodFormSchema = z.object({
   name: z.string(),
-  protein: z.coerce.number(),
-  carbs: z.coerce.number(),
-  fat: z.coerce.number(),
+  protein: z.coerce.number().transform((value) => value.toString()),
+  carbs: z.coerce.number().transform((value) => value.toString()),
+  fat: z.coerce.number().transform((value) => value.toString()),
+  calories: z.coerce.number().transform((value) => value.toString()),
 });
 export type FoodFormSchemaType = z.infer<typeof FoodFormSchema>;

@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { FoodFormSchemaType, OnboardingFormSchemaType } from "@/lib/form";
 import { headers } from "next/headers";
-import { profile } from "./db/schema";
+import { food, profile } from "./db/schema";
 import { db } from "./db";
 
 export async function analyzeImage(imageUrl: string) {
@@ -34,6 +34,7 @@ export async function analyzeImage(imageUrl: string) {
                 protein: ...
                 carbs:...
                 fat:....
+                calories:...
               }`,
             },
             {
@@ -52,7 +53,6 @@ export async function analyzeImage(imageUrl: string) {
 
   return data;
 }
-
 export async function insertProfile(values: OnboardingFormSchemaType) {
   const session = await auth.api.getSession({
     headers: headers(),
@@ -70,4 +70,19 @@ export async function insertProfile(values: OnboardingFormSchemaType) {
   return result;
 }
 
-export async function addFood(values: FoodFormSchemaType) {}
+export async function addFood(values: FoodFormSchemaType) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (!session) {
+    throw new Error("No session found.");
+  }
+
+  const result = await db.insert(food).values({
+    ...values,
+    userId: session.user.id,
+  });
+
+  return result;
+}

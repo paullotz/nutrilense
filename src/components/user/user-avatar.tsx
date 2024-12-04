@@ -39,10 +39,9 @@ export const UserAvatar = ({ session }: { session: any }) => {
           Profile
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={async (e) => {
-            e.preventDefault();
-            await signOut();
-            router.push("/");
+          onSelect={(e) => {
+            signOut();
+            router.push("/signin");
           }}
           className="flex flex-row"
         >

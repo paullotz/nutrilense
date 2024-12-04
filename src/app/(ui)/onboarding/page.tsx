@@ -20,8 +20,8 @@ const page = async () => {
     where: eq(profile?.userId, session.user.id),
   });
 
-  if (!userProfile) {
-    redirect("/dashboard");
+  if (userProfile) {
+    redirect("/");
   }
 
   return (

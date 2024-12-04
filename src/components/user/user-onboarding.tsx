@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -26,22 +25,28 @@ import {
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { insertProfile } from "@/server/actions";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const UserOnboarding = () => {
+  const router = useRouter();
   const form = useForm<OnboardingFormSchemaType>({
     resolver: zodResolver(OnboardingFormSchema),
     defaultValues: {
-      height: 170,
-      weight: 60,
+      height: "170",
+      weight: "60",
       goal: "gain_muscle",
       gender: "divers",
       activityLevel: "low",
+      goalCalories: "2400",
     },
   });
 
   const createProfile = useMutation({
     mutationFn: insertProfile,
-    onSuccess: () => {},
+    onSuccess: () => {
+      router.push("/");
+    },
   });
 
   const onSubmit = (values: OnboardingFormSchemaType) => {
@@ -68,7 +73,7 @@ export const UserOnboarding = () => {
 
   return (
     <>
-      <div className="container mx-auto mt-4">
+      <div className="container mx-auto mt-4 p-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -93,6 +98,22 @@ export const UserOnboarding = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Weight</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="goalCalories"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Calorie goal</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="shadcn" {...field} />
                   </FormControl>
@@ -196,7 +217,12 @@ export const UserOnboarding = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={createProfile.isPending}>
+              {createProfile.isPending && (
+                <Loader2 className="animate-spin h-4 w-4 mr-2" />
+              )}
+              Submit
+            </Button>
           </form>
         </Form>
       </div>

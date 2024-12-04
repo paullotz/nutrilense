@@ -2,18 +2,25 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Food, Profile } from "@/server/db/schema";
 
 interface CalorieOverviewProps {
-  dailyGoal: number;
-  currentCalories: number;
+  food: Food[];
+  profile: Profile;
 }
 
-export const CalorieOverview = ({
-  dailyGoal,
-  currentCalories,
-}: CalorieOverviewProps) => {
+export const CalorieOverview = ({ food, profile }: CalorieOverviewProps) => {
+  const today = new Date();
+  const todayString = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+  const dailyCalories = food
+    .filter((item: Food) => {
+      // Assuming createdAt is a date object or has a string in a similar format
+      const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
+      return createdAtString === todayString;
+    })
+    .reduce((sum: number, current: Food) => sum + Number(current.calories), 0);
   const percentage = Math.min(
-    Math.round((currentCalories / dailyGoal) * 100),
+    Math.round((dailyCalories / profile.goalCalories) * 100),
     100,
   );
   const strokeWidth = 10;
@@ -57,9 +64,9 @@ export const CalorieOverview = ({
             <span className="text-sm font-medium text-muted-foreground">
               Daily goal
             </span>
-            <span className="text-3xl font-bold">{currentCalories}</span>
+            <span className="text-3xl font-bold">{dailyCalories}</span>
             <span className="text-sm font-medium text-muted-foreground">
-              / {dailyGoal} kcal
+              / {profile.goalCalories} kcal
             </span>
           </div>
         </div>

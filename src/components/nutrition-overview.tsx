@@ -36,7 +36,30 @@ const Nutrient: React.FC<NutrientProps> = ({
   </div>
 );
 
-export const NutritionOverview = () => {
+export const NutritionOverview = ({ food }: { food: any }) => {
+  const today = new Date();
+  const todayString = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+  const dailyProteins = food
+    .filter((item: any) => {
+      // Assuming createdAt is a date object or has a string in a similar format
+      const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
+      return createdAtString === todayString;
+    })
+    .reduce((sum: number, current: any) => sum + Number(current.protein), 0);
+  const dailyCarbs = food
+    .filter((item: any) => {
+      // Assuming createdAt is a date object or has a string in a similar format
+      const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
+      return createdAtString === todayString;
+    })
+    .reduce((sum: number, current: any) => sum + Number(current.carbs), 0);
+  const dailyFats = food
+    .filter((item: any) => {
+      // Assuming createdAt is a date object or has a string in a similar format
+      const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
+      return createdAtString === todayString;
+    })
+    .reduce((sum: number, current: any) => sum + Number(current.fat), 0);
   return (
     <Card className="w-full max-w-sm mx-auto h-[400px] flex flex-col">
       <CardHeader>
@@ -47,7 +70,7 @@ export const NutritionOverview = () => {
       <CardContent className="flex-grow flex flex-col justify-center space-y-6">
         <Nutrient
           name="Proteins"
-          amount={120}
+          amount={dailyProteins.toFixed(2)}
           max={150}
           unit="g"
           icon={Beef}
@@ -55,7 +78,7 @@ export const NutritionOverview = () => {
         />
         <Nutrient
           name="Carbs"
-          amount={100}
+          amount={dailyCarbs.toFixed(2)}
           max={250}
           unit="g"
           icon={Bread}
@@ -63,7 +86,7 @@ export const NutritionOverview = () => {
         />
         <Nutrient
           name="Fats"
-          amount={90}
+          amount={dailyFats.toFixed(2)}
           max={120}
           unit="g"
           icon={Droplet}

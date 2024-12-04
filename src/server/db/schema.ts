@@ -5,6 +5,7 @@ import {
   pgTableCreator,
   decimal,
   pgEnum,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { z } from "zod";
 import { createSelectSchema } from "drizzle-zod";
@@ -30,25 +31,27 @@ export const food = createTable("food", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull(),
+  name: varchar("name").notNull(),
   protein: decimal("protein").notNull(),
   fat: decimal("fat").notNull(),
   carbs: decimal("carbs").notNull(),
+  calories: decimal("calories").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   userId: text("userId")
     .notNull()
     .references(() => user.id),
 });
 
-export const profile = createTable("userProfile", {
+export const profile = createTable("profile", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  height: decimal("height"),
-  weight: decimal("weight"),
-  gender: genderEnum("gender").default("divers"),
-  goal: goalEnum("goal").default("gain_muscle"),
-  activityLevel: activityLevelEnum("activityLevel").default("low"),
+  height: decimal("height").notNull(),
+  weight: decimal("weight").notNull(),
+  gender: genderEnum("gender").default("divers").notNull(),
+  goal: goalEnum("goal").default("gain_muscle").notNull(),
+  goalCalories: decimal("goalCalories").notNull(),
+  activityLevel: activityLevelEnum("activityLevel").default("low").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   userId: text("userId")
@@ -98,3 +101,7 @@ export const verification = createTable("verification", {
 });
 
 export type User = z.infer<ReturnType<typeof createSelectSchema<typeof user>>>;
+export type Food = z.infer<ReturnType<typeof createSelectSchema<typeof food>>>;
+export type Profile = z.infer<
+  ReturnType<typeof createSelectSchema<typeof profile>>
+>;
