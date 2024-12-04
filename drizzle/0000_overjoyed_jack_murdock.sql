@@ -1,3 +1,6 @@
+CREATE TYPE "public"."activity_level" AS ENUM('low', 'medium', 'high');--> statement-breakpoint
+CREATE TYPE "public"."gender" AS ENUM('male', 'female', 'divers');--> statement-breakpoint
+CREATE TYPE "public"."goal" AS ENUM('gain_muscle', 'loose_fat', 'maintain');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nutrilense_account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"accountId" text NOT NULL,
@@ -8,6 +11,18 @@ CREATE TABLE IF NOT EXISTS "nutrilense_account" (
 	"idToken" text,
 	"expiresAt" timestamp,
 	"password" text
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "nutrilense_userProfile" (
+	"id" text PRIMARY KEY NOT NULL,
+	"height" numeric,
+	"weight" numeric,
+	"gender" "gender" DEFAULT 'divers',
+	"goal" "goal" DEFAULT 'gain_muscle',
+	"activityLevel" "activity_level" DEFAULT 'low',
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL,
+	"userId" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nutrilense_session" (
@@ -38,6 +53,12 @@ CREATE TABLE IF NOT EXISTS "nutrilense_verification" (
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "nutrilense_account" ADD CONSTRAINT "nutrilense_account_userId_nutrilense_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."nutrilense_user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "nutrilense_userProfile" ADD CONSTRAINT "nutrilense_userProfile_userId_nutrilense_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."nutrilense_user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

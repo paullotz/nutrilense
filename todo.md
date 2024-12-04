@@ -3,5 +3,12 @@
 - [x] add database schema
 - [x] add auth
 - [x] add basic pages and structure (auth, landing...)
-- [] deploy to vercel
+- [x] deploy to vercel
+- [] extend schema
+- [] onboarding page
+    - [] kundenprofil: gewicht, größe, alter, ziel, kalorien berechnen in der seite
+- [] dashboard page
+    - [] calorie counting component - progress bar?
+    - [] camera component
+- [] failsafe einbauen falls nichts erkannt wird, detected: ...
 

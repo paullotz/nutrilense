@@ -10,7 +10,7 @@ import { CgSpinner } from "react-icons/cg";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const callbackURL = "/";
+const callbackURL = "/onboarding";
 
 export const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false);

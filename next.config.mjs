@@ -5,6 +5,10 @@ const nextConfig = {
       bodySizeLimit: "10mb",
     },
   },
+  reactStrictMode: true,
+  images: {
+    domains: ["utfs.io"],
+  },
 };
 
 export default nextConfig;

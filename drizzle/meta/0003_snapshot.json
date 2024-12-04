@@ -1,6 +1,6 @@
 {
-  "id": "71aac2b7-02da-4dd6-976c-3ab50b278f24",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "66bef0f8-362c-4ea2-acf8-050f5effaffa",
+  "prevId": "212fdbc8-0c06-4d06-9c27-fa984e0484d1",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -85,8 +85,84 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.nutrilense_userProfile": {
-      "name": "nutrilense_userProfile",
+    "public.nutrilense_food": {
+      "name": "nutrilense_food",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "protein": {
+          "name": "protein",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fat": {
+          "name": "fat",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "carbs": {
+          "name": "carbs",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "calories": {
+          "name": "calories",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nutrilense_food_userId_nutrilense_user_id_fk": {
+          "name": "nutrilense_food_userId_nutrilense_user_id_fk",
+          "tableFrom": "nutrilense_food",
+          "tableTo": "nutrilense_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.nutrilense_profile": {
+      "name": "nutrilense_profile",
       "schema": "",
       "columns": {
         "id": {
@@ -99,20 +175,20 @@
           "name": "height",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "weight": {
           "name": "weight",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "gender": {
           "name": "gender",
           "type": "gender",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'divers'"
         },
         "goal": {
@@ -120,15 +196,21 @@
           "type": "goal",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'gain_muscle'"
+        },
+        "goalCalories": {
+          "name": "goalCalories",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
         },
         "activityLevel": {
           "name": "activityLevel",
           "type": "activity_level",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'low'"
         },
         "createdAt": {
@@ -154,9 +236,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "nutrilense_userProfile_userId_nutrilense_user_id_fk": {
-          "name": "nutrilense_userProfile_userId_nutrilense_user_id_fk",
-          "tableFrom": "nutrilense_userProfile",
+        "nutrilense_profile_userId_nutrilense_user_id_fk": {
+          "name": "nutrilense_profile_userId_nutrilense_user_id_fk",
+          "tableFrom": "nutrilense_profile",
           "tableTo": "nutrilense_user",
           "columnsFrom": [
             "userId"

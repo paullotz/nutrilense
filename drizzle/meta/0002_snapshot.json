@@ -1,6 +1,6 @@
 {
-  "id": "71aac2b7-02da-4dd6-976c-3ab50b278f24",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "212fdbc8-0c06-4d06-9c27-fa984e0484d1",
+  "prevId": "78925cbe-25b1-41de-b7a0-1560d07b337a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -85,6 +85,82 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.nutrilense_food": {
+      "name": "nutrilense_food",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "protein": {
+          "name": "protein",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fat": {
+          "name": "fat",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "carbs": {
+          "name": "carbs",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "calories": {
+          "name": "calories",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nutrilense_food_userId_nutrilense_user_id_fk": {
+          "name": "nutrilense_food_userId_nutrilense_user_id_fk",
+          "tableFrom": "nutrilense_food",
+          "tableTo": "nutrilense_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.nutrilense_userProfile": {
       "name": "nutrilense_userProfile",
       "schema": "",
@@ -122,6 +198,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'gain_muscle'"
+        },
+        "goalCalories": {
+          "name": "goalCalories",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
         },
         "activityLevel": {
           "name": "activityLevel",
