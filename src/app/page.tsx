@@ -7,7 +7,7 @@ import { NutritionOverview } from "@/components/nutrition-overview";
 import { CameraTile } from "@/components/camera-tile";
 import { UserAvatar } from "@/components/user/user-avatar";
 import { FoodLog } from "@/components/food-log";
-import { food } from "@/server/db/schema";
+import { food, recipe } from "@/server/db/schema";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
 import { LandingPage } from "@/components/landing-page";
@@ -34,6 +34,8 @@ export default async function Home() {
     redirect("/onboarding");
   }
 
+  const recipes = await db.select().from(recipe);
+
   return (
     <>
       <main className="container mx-auto p-4">
@@ -45,7 +47,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <CalorieOverview food={foodLog} profile={userProfile} />
           <NutritionOverview food={foodLog} />
-          <RecipeIdeas />
+          <RecipeIdeas recipes={recipes} />
           <CameraTile />
           <FoodLog food={foodLog} />
         </div>

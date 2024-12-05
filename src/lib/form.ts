@@ -44,6 +44,14 @@ export const ProfileFormSchema = z.object({
 });
 export type ProfileFormSchemaType = z.infer<typeof ProfileFormSchema>;
 
+export const RecipeFormSchema = z.object({
+  name: z.string().min(1),
+  ingredients: z.string().min(1),
+  instructions: z.string().min(1),
+  calories: z.coerce.number().transform((value) => value.toString()),
+});
+export type RecipeFormSchemaType = z.infer<typeof RecipeFormSchema>;
+
 export const FoodFormSchema = z.object({
   name: z.string(),
   protein: z.coerce.number().transform((value) => value.toString()),

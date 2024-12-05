@@ -5,9 +5,10 @@ import {
   FoodFormSchemaType,
   OnboardingFormSchemaType,
   ProfileFormSchemaType,
+  RecipeFormSchemaType,
 } from "@/lib/form";
 import { headers } from "next/headers";
-import { food, profile, user } from "./db/schema";
+import { food, profile, recipe, user } from "./db/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -117,5 +118,35 @@ export async function addFood(values: FoodFormSchemaType) {
     userId: session.user.id,
   });
 
+  return result;
+}
+
+export async function addRecipe(values: RecipeFormSchemaType) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (!session) {
+    throw new Error("No session found.");
+  }
+
+  const result = await db.insert(recipe).values({
+    ...values,
+    userId: session.user.id,
+  });
+
+  return result;
+}
+
+export async function deleteRecipe(id: string) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (!session) {
+    throw new Error("No session found.");
+  }
+
+  const result = await db.delete(recipe).where(eq(recipe.id, id));
   return result;
 }

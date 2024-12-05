@@ -1,12 +1,13 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { profile } from "@/server/db/schema";
+import { profile, recipe } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { UserProfile } from "@/components/user/user-profile";
+import { RecipeManagement } from "@/components/recipe-management";
 
 const page = async () => {
   const session = await auth.api.getSession({
@@ -25,9 +26,13 @@ const page = async () => {
     redirect("/");
   }
 
+  const recipes = await db.select().from(recipe);
+
   return (
     <>
       <UserProfile profile={userProfile} session={session} />
+      <hr className="m-4" />
+      {session.user.role === "admin" && <RecipeManagement recipes={recipes} />}
     </>
   );
 };

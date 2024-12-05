@@ -33,7 +33,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { updateProfile as updateProfileMutation } from "@/server/actions";
 import { Calculator, Loader2 } from "lucide-react";
@@ -251,6 +250,22 @@ export const UserProfile = ({
               )}
             />
 
+            <div className="grid grid-cols-2 gap-3">
+              <FormItem>
+                <FormLabel>Plan</FormLabel>
+                <FormControl>
+                  <Input disabled defaultValue={session.user.plan} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <FormControl>
+                  <Input disabled defaultValue={session.user.role} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </div>
             <div className="grid grid-cols-2 gap-3">
               <FormItem>
                 <FormLabel>Joined on</FormLabel>

@@ -27,6 +27,20 @@ export const activityLevelEnum = pgEnum("activity_level", [
   "high",
 ]);
 
+export const recipe = createTable("recipe", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: varchar("name").notNull(),
+  ingredients: varchar("ingredients").notNull(),
+  instructions: varchar("instructions").notNull(),
+  calories: decimal("calories").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id),
+});
+
 export const food = createTable("food", {
   id: text("id")
     .primaryKey()
@@ -65,6 +79,8 @@ export const user = createTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("emailVerified").notNull(),
   image: text("image"),
+  role: text("role").default("admin"),
+  plan: text("plan").default("free"),
   createdAt: timestamp("createdAt").notNull(),
   updatedAt: timestamp("updatedAt").notNull(),
 });
@@ -100,8 +116,21 @@ export const verification = createTable("verification", {
   expiresAt: timestamp("expiresAt").notNull(),
 });
 
+export const schema = {
+  user,
+  food,
+  recipe,
+  profile,
+  session,
+  account,
+  verification,
+};
+
 export type User = z.infer<ReturnType<typeof createSelectSchema<typeof user>>>;
 export type Food = z.infer<ReturnType<typeof createSelectSchema<typeof food>>>;
+export type Recipe = z.infer<
+  ReturnType<typeof createSelectSchema<typeof recipe>>
+>;
 export type Profile = z.infer<
   ReturnType<typeof createSelectSchema<typeof profile>>
 >;
