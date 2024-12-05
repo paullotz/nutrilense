@@ -115,9 +115,7 @@ export const UserProfile = ({
                   <FormControl>
                     <Input placeholder="Your name" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>This is your user name.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -131,9 +129,7 @@ export const UserProfile = ({
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>This is your height.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -148,7 +144,7 @@ export const UserProfile = ({
                     <Input type="number" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    This is your current weight.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -163,9 +159,7 @@ export const UserProfile = ({
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>This is your calorie goal.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -193,10 +187,7 @@ export const UserProfile = ({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    You can manage email addresses in your{" "}
-                    <Link href="/examples/forms">email settings</Link>.
-                  </FormDescription>
+                  <FormDescription>This is your general goal.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -224,9 +215,7 @@ export const UserProfile = ({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    You can manage email addresses in your{" "}
-                  </FormDescription>
+                  <FormDescription>This is your gender.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -255,8 +244,7 @@ export const UserProfile = ({
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    You can manage email addresses in your{" "}
-                    <Link href="/examples/forms">email settings</Link>.
+                    This is your activity level.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
