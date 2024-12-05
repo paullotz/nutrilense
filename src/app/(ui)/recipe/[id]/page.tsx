@@ -48,6 +48,10 @@ export default async function Page({
         <CardContent>
           <div className="space-y-4">
             <div>
+              <h3 className="text-lg font-semibold mb-2">Calories:</h3>
+              <p className="whitespace-p-line">{fetchedRecipe.calories}</p>
+            </div>
+            <div>
               <h3 className="text-lg font-semibold mb-2">Ingredients:</h3>
               <p className="whitespace-p-line">{fetchedRecipe.ingredients}</p>
             </div>
