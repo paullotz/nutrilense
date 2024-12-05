@@ -10,14 +10,7 @@ import { FoodLog } from "@/components/food-log";
 import { food } from "@/server/db/schema";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-
-function areDatesEqual(date1: Date, date2: Date): boolean {
-  return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
-}
+import { LandingPage } from "@/components/landing-page";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -25,7 +18,7 @@ export default async function Home() {
   });
 
   if (!session) {
-    redirect("/signin");
+    return <LandingPage />;
   }
 
   const foodLog = await db
@@ -54,7 +47,7 @@ export default async function Home() {
           <NutritionOverview food={foodLog} />
           <RecipeIdeas />
           <CameraTile />
-          <FoodLog />
+          <FoodLog food={foodLog} />
         </div>
         <div className="py-3" />
       </main>

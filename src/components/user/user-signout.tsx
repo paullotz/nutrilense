@@ -16,8 +16,13 @@ export const SignOut = ({ text, icon = true }: SignOutProps) => {
     <>
       <Button
         onClick={async () => {
-          await signOut();
-          router.push("/");
+          await signOut({
+            fetchOptions: {
+              onSuccess: () => {
+                router.push("/signin"); // redirect to login page
+              },
+            },
+          });
         }}
         variant={"ghost"}
         size={icon ? "icon" : "default"}

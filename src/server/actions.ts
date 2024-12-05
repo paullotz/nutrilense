@@ -1,10 +1,15 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { FoodFormSchemaType, OnboardingFormSchemaType } from "@/lib/form";
+import {
+  FoodFormSchemaType,
+  OnboardingFormSchemaType,
+  ProfileFormSchemaType,
+} from "@/lib/form";
 import { headers } from "next/headers";
-import { food, profile } from "./db/schema";
+import { food, profile, user } from "./db/schema";
 import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export async function analyzeImage(imageUrl: string) {
   const openAiApiKey = process.env.OPENAI_API_KEY;
@@ -53,6 +58,7 @@ export async function analyzeImage(imageUrl: string) {
 
   return data;
 }
+
 export async function insertProfile(values: OnboardingFormSchemaType) {
   const session = await auth.api.getSession({
     headers: headers(),
@@ -66,6 +72,33 @@ export async function insertProfile(values: OnboardingFormSchemaType) {
     ...values,
     userId: session.user.id,
   });
+
+  return result;
+}
+
+export async function updateProfile(values: ProfileFormSchemaType) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (!session) {
+    throw new Error("No session found.");
+  }
+
+  if (session.user.name !== values.name) {
+    // Update user name incase its different
+    await db
+      .update(user)
+      .set({ name: values.name })
+      .where(eq(user.id, session.user.id));
+  }
+
+  const result = await db
+    .update(profile)
+    .set({
+      ...values,
+    })
+    .where(eq(profile.userId, session.user.id));
 
   return result;
 }

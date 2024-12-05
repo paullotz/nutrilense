@@ -15,7 +15,6 @@ const callbackURL = "/onboarding";
 export const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isGithubLoading, setIsGithubLoading] = useState(false);
 
   return (
     <div className={cn("grid gap-2", className)} {...props}>
@@ -39,27 +38,6 @@ export const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
           <FcGoogle className="h-4 w-4 mr-2" />
         )}{" "}
         Continue with Google
-      </Button>
-      <Button
-        size={"lg"}
-        variant="outline"
-        className="w-full"
-        onClick={async () => {
-          await signIn.social({
-            provider: "github",
-            callbackURL,
-          });
-          setIsGithubLoading(true);
-          setIsLoading(true);
-        }}
-        disabled={isGithubLoading || isLoading}
-      >
-        {isGithubLoading ? (
-          <CgSpinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <FaGithub className="h-4 w-4 mr-2" />
-        )}{" "}
-        Continue with Github
       </Button>
     </div>
   );

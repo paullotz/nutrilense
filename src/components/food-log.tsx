@@ -2,11 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { db } from "@/server/db";
-import { food } from "@/server/db/schema";
+import { Food } from "@/server/db/schema";
 
 function getDate() {
   const today = new Date();
@@ -16,9 +14,7 @@ function getDate() {
   return `${month}/${date}/${year}`;
 }
 
-export const FoodLog = async () => {
-  const date = getDate();
-
+export const FoodLog = async ({ food }: { food: Food[] }) => {
   const session = await auth.api.getSession({
     headers: headers(),
   });
@@ -27,10 +23,12 @@ export const FoodLog = async () => {
     redirect("/signin");
   }
 
-  const foodLog = await db
-    .select()
-    .from(food)
-    .where(eq(food.userId, session.user.id));
+  const today = new Date();
+  const todayString = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+  const foodLog = food.filter((item: Food) => {
+    const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
+    return createdAtString === todayString;
+  });
 
   if (foodLog && foodLog.length > 0) {
     return (
@@ -38,7 +36,7 @@ export const FoodLog = async () => {
         <CardHeader>
           <CardTitle className="flex flex-row gap-4 text-2xl font-bold text-center items-center justify-center">
             <ChevronLeft className="h-4 w-4" />
-            <span>{date}</span>
+            <span>{getDate()}</span>
             <ChevronRight className="h-4 w-4" />
           </CardTitle>
         </CardHeader>

@@ -1,6 +1,16 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
 
-export const Footer = () => {
+export const Footer = async () => {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (!session) {
+    return <></>;
+  }
+
   return (
     <footer>
       <div className="container mx-auto p-6 md:py-8">
