@@ -11,6 +11,7 @@ import { food, recipe } from "@/server/db/schema";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
 import { LandingPage } from "@/components/landing-page";
+import { ReviewTile } from "@/components/review-tile";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -50,6 +51,7 @@ export default async function Home() {
           <RecipeIdeas recipes={recipes} />
           <CameraTile />
           <FoodLog food={foodLog} />
+          <ReviewTile food={foodLog} profile={userProfile} />
         </div>
         <div className="py-3" />
       </main>

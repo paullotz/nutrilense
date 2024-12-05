@@ -8,7 +8,7 @@ import {
   RecipeFormSchemaType,
 } from "@/lib/form";
 import { headers } from "next/headers";
-import { food, profile, recipe, user } from "./db/schema";
+import { Profile, Food, food, profile, recipe, user } from "./db/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -48,6 +48,45 @@ export async function analyzeImage(imageUrl: string) {
               image_url: {
                 url: imageUrl,
               },
+            },
+          ],
+        },
+      ],
+    }),
+  });
+
+  const data = await response.json();
+
+  return data;
+}
+
+export async function reviewDay({
+  food,
+  profile,
+}: {
+  food: Food[];
+  profile: Profile;
+}) {
+  const openAiApiKey = process.env.OPENAI_API_KEY;
+  if (!openAiApiKey) {
+    throw new Error("OPENAI_API_KEY environment variable is not set");
+  }
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${openAiApiKey}`,
+    },
+    body: JSON.stringify({
+      model: "chatgpt-4o-latest",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `You are now a nutrition expert. You are part of an app that allows users to track their food intake. You are provided some insights into the daily nutrition of the user please review their intake and give them advices on base of the values you were provided. NO markdown syntax, only plain text, no numbering all will be displayed in one text box no new lines. Dont make it too long. Daily Food: ${JSON.stringify(food)}, Profile: ${JSON.stringify(profile)}`,
             },
           ],
         },
