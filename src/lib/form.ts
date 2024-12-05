@@ -22,6 +22,7 @@ export const activityLevelLabels = {
   medium: "Medium",
   high: "High",
 };
+
 export const OnboardingFormSchema = z.object({
   weight: z.coerce.number().transform((value) => value.toString()),
   height: z.coerce.number().transform((value) => value.toString()),
