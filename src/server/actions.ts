@@ -72,6 +72,13 @@ export async function reviewDay({
     throw new Error("OPENAI_API_KEY environment variable is not set");
   }
 
+  const today = new Date();
+  const todayString = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+  const todaysFood = food.filter((item: Food) => {
+    const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
+    return createdAtString === todayString;
+  });
+
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -86,7 +93,7 @@ export async function reviewDay({
           content: [
             {
               type: "text",
-              text: `You are now a nutrition expert. You are part of an app that allows users to track their food intake. You are provided some insights into the daily nutrition of the user please review their intake and give them advices on base of the values you were provided. NO markdown syntax, only plain text, no numbering all will be displayed in one text box no new lines. Dont make it too long. Daily Food: ${JSON.stringify(food)}, Profile: ${JSON.stringify(profile)}`,
+              text: `You are now a nutrition expert. You are part of an app that allows users to track their food intake. You are provided some insights into the daily nutrition of the user please review their intake and give them advices on base of the values you were provided. NO markdown syntax, only plain text, no numbering all will be displayed in one text box no new lines. Dont make it too long. Daily Food: ${JSON.stringify(todaysFood)}, Profile: ${JSON.stringify(profile)}`,
             },
           ],
         },

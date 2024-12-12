@@ -24,7 +24,6 @@ export const RecipeIdeas = ({ recipes }: { recipes: Recipe[] }) => {
       <CardContent className="flex-grow overflow-auto px-4 pb-4">
         <ul className="space-y-3">
           {recipes.map((recipe, index) => {
-            // Assign random icon and color
             const { icon: Icon, color } =
               iconColorPairs[Math.floor(Math.random() * iconColorPairs.length)];
 

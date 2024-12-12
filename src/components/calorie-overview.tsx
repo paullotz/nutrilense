@@ -14,7 +14,6 @@ export const CalorieOverview = ({ food, profile }: CalorieOverviewProps) => {
   const todayString = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
   const dailyCalories = food
     .filter((item: Food) => {
-      // Assuming createdAt is a date object or has a string in a similar format
       const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
       return createdAtString === todayString;
     })

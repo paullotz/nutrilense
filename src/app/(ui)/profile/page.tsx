@@ -31,8 +31,12 @@ const page = async () => {
   return (
     <>
       <UserProfile profile={userProfile} session={session} />
-      <hr className="m-4" />
-      {session.user.role === "admin" && <RecipeManagement recipes={recipes} />}
+      {session.user.role === "admin" && (
+        <>
+          <hr className="m-4" />
+          <RecipeManagement recipes={recipes} />
+        </>
+      )}
     </>
   );
 };

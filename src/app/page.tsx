@@ -7,7 +7,7 @@ import { NutritionOverview } from "@/components/nutrition-overview";
 import { CameraTile } from "@/components/camera-tile";
 import { UserAvatar } from "@/components/user/user-avatar";
 import { FoodLog } from "@/components/food-log";
-import { food, recipe } from "@/server/db/schema";
+import { Food, food, recipe } from "@/server/db/schema";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
 import { LandingPage } from "@/components/landing-page";
@@ -37,6 +37,16 @@ export default async function Home() {
 
   const recipes = await db.select().from(recipe);
 
+  const today = new Date();
+  const todayString = `${today.getDate()}.${
+    today.getMonth() + 1
+  }.${today.getFullYear()}`;
+  const todaysFood = foodLog.filter((item: Food) => {
+    const createdAtString = `${item.createdAt.getDate()}.${
+      item.createdAt.getMonth() + 1
+    }.${item.createdAt.getFullYear()}`;
+    return createdAtString === todayString;
+  });
   return (
     <>
       <main className="container mx-auto p-4">
@@ -51,7 +61,9 @@ export default async function Home() {
           <RecipeIdeas recipes={recipes} />
           <CameraTile />
           <FoodLog food={foodLog} />
-          <ReviewTile food={foodLog} profile={userProfile} />
+          {todaysFood.length > 0 && (
+            <ReviewTile food={foodLog} profile={userProfile} />
+          )}
         </div>
         <div className="py-3" />
       </main>

@@ -41,21 +41,18 @@ export const NutritionOverview = ({ food }: { food: any }) => {
   const todayString = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
   const dailyProteins = food
     .filter((item: any) => {
-      // Assuming createdAt is a date object or has a string in a similar format
       const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
       return createdAtString === todayString;
     })
     .reduce((sum: number, current: any) => sum + Number(current.protein), 0);
   const dailyCarbs = food
     .filter((item: any) => {
-      // Assuming createdAt is a date object or has a string in a similar format
       const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
       return createdAtString === todayString;
     })
     .reduce((sum: number, current: any) => sum + Number(current.carbs), 0);
   const dailyFats = food
     .filter((item: any) => {
-      // Assuming createdAt is a date object or has a string in a similar format
       const createdAtString = `${item.createdAt.getDate()}.${item.createdAt.getMonth() + 1}.${item.createdAt.getFullYear()}`;
       return createdAtString === todayString;
     })
