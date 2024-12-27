@@ -14,7 +14,7 @@ const page = async () => {
   });
 
   if (!session) {
-    throw new Error("No session found.");
+    redirect("/");
   }
 
   const userProfile = await db.query.profile.findFirst({

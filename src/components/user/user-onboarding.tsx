@@ -99,7 +99,7 @@ export const UserOnboarding = () => {
               name="goalCalories"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Weight</FormLabel>
+                  <FormLabel>Calorie goal</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="shadcn" {...field} />
                   </FormControl>
